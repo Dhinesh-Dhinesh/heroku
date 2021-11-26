@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-require('./employee');
+require('./schemas');
 //!<----------------------------------->
 
 app.use(bodyParser.json());
@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 
 const mongoUri = 'mongodb+srv://dhi:44FR83yNbBkuHdZc@cluster0.kkndm.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 const Employee = mongoose.model('employee');
+const ImageUploader = mongoose.model('uploader');
 
 //--------------- FOR CONNECTION
 
@@ -29,7 +30,7 @@ mongoose.connection.on('error', (err) => {
 
 //---------------//
 app.get('/', (req, res) => {
-    res.send('Hello bro');
+    res.send('Hello world');
 })
 
 app.get('/ok', (req, res) => {
@@ -89,8 +90,33 @@ app.post('/update',(req,res)=>{
     })
 })
 
-//PORT
+//Image uploader for cloudinary uri
 
-app.listen(process.env.PORT || 3000,()=>{
+app.post('/uploader',(req,res)=>{
+    const imgUploader  = new ImageUploader({
+        uri:req.body.uri
+    })
+
+    imgUploader.save().then(data=>{
+        console.log(data);
+        res.send('Data received');
+    }).catch(err=>{
+        console.log(err);
+    })
+})
+
+//FOR get images uri from cloudinary
+
+app.get('/getImages',(req,res)=>{
+    ImageUploader.find({}).then(data=>{
+        res.send(data);
+    }).catch(err=>{
+        console.log(err);
+    })
+})
+
+// PORT
+
+app.listen(3000,()=>{
     console.log('Server started at port 3000');
 })
