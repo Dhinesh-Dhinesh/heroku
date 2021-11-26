@@ -3,7 +3,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-require('./schemas');
+require('./employee');
+require('./image');
 //!<----------------------------------->
 
 app.use(bodyParser.json());
@@ -101,7 +102,7 @@ app.post('/uploader',(req,res)=>{
         console.log(data);
         res.send('Data received');
     }).catch(err=>{
-        console.log(err);
+        console.log("ID :1" + err);
     })
 })
 
@@ -111,7 +112,7 @@ app.get('/getImages',(req,res)=>{
     ImageUploader.find({}).then(data=>{
         res.send(data);
     }).catch(err=>{
-        console.log(err);
+        console.log("id : 2 " + err);
     })
 })
 
